@@ -72,7 +72,10 @@ app.use((err, req, res, next) => {
 const changePasswordRoute = require("./routes/changePassword");
 app.use("/api", changePasswordRoute);
 //yaha tak khtm
-
+//ye user login ke liye add huii
+const userAuthRoutes = require("./routes/userAuth");
+app.use("/api/user", userAuthRoutes);
+//yaha khatm ho gai
 // ─── Start ────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log('\n╔══════════════════════════════════════╗');
