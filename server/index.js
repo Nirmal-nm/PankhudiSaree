@@ -49,7 +49,6 @@ app.use("/api", changePasswordRoute);
 
 const userAuthRoutes = require("./routes/userAuth");
 app.use("/api/user", userAuthRoutes);
-
 console.log("User auth routes loaded...");
 
 // ─── Health check ─────────────────────────────────────────────
