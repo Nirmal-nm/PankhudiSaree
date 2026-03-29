@@ -1,4 +1,4 @@
-# 🥻 RangMahal — Full-Stack Saree Store
+# 🥻 PankhudiSaree — Full-Stack Saree Store
 
 **Node.js + Express + MySQL** | Full e-commerce with Admin Panel
 
