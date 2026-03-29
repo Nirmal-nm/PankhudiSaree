@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PankhudiSaree Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--m:#6B1A2A;--g:#C9923E;--gl:#E8C07A;--cr:#FDF6EC;--dk:#1A0A0E;--tx:#2D1B22;--mu:#7A5C65;--bd:rgba(107,26,42,0.15);--wh:#fff;--sh:0 4px 20px rgba(0,0,0,.08);--sw:220px;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito Sans',sans-serif;background:#F0E8E0;color:var(--tx);display:flex;min-height:100vh;}
+  /* SIDEBAR */
+  .sb{width:var(--sw);background:var(--dk);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:100;overflow-y:auto;}
+  .sb-logo{padding:22px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+  .sb-logo .logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gl);text-decoration:none;}
+  .sb-logo .logo span{color:var(--g);}
+  .sb-logo p{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px;letter-spacing:1.5px;text-transform:uppercase;}
+  .sb nav{flex:1;padding:16px 0;}
+  .ni{display:flex;align-items:center;gap:12px;padding:13px 18px;color:rgba(255,255,255,.6);text-decoration:none;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;border-left:3px solid transparent;border:none;background:none;width:100%;text-align:left;}
+  .ni:hover{background:rgba(255,255,255,.05);color:var(--wh);}
+  .ni.active{color:var(--gl);border-left:3px solid var(--g);background:rgba(201,146,62,.1);}
+  .ni .ic{font-size:17px;width:20px;text-align:center;}
+  .sb-ft{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);}
+  .sb-ft a,.sb-ft button{color:rgba(255,255,255,.5);font-size:13px;text-decoration:none;display:block;margin-bottom:6px;background:none;border:none;cursor:pointer;font-family:'Nunito Sans',sans-serif;text-align:left;}
+  .sb-ft a:hover,.sb-ft button:hover{color:var(--gl);}
+  /* MAIN */
+  .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+  .topbar{background:var(--wh);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--sh);position:sticky;top:0;z-index:90;}
+  .topbar h1{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--m);}
+  .topbar-r{display:flex;gap:10px;align-items:center;}
+  .db-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;}
+  .db-dot.green{background:#22C55E;}.db-dot.red{background:#EF4444;}.db-dot.yellow{background:#EAB308;}
+  /* BUTTON */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none;font-family:'Nunito Sans',sans-serif;}
+  .bp{background:var(--m);color:var(--wh);}.bp:hover{background:#8B2235;}
+  .bg{background:var(--g);color:var(--wh);}.bg:hover{background:#B8822E;}
+  .bo{background:transparent;border:2px solid var(--m);color:var(--m);}.bo:hover{background:var(--m);color:var(--wh);}
+  .bs{padding:6px 14px;font-size:12px;}
+  .bdr{background:#DC2626;color:var(--wh);}.bdr:hover{background:#B91C1C;}
+  .bsu{background:#059669;color:var(--wh);}.bsu:hover{background:#047857;}
+  /* CONTENT */
+  .content{padding:24px;flex:1;}
+  .page{display:none;}.page.active{display:block;}
+  /* STAT CARDS */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px;margin-bottom:24px;}
+  .scard{background:var(--wh);border-radius:14px;padding:20px;box-shadow:var(--sh);border-left:4px solid var(--g);}
+  .scard.red{border-left-color:var(--m);}.scard.gr{border-left-color:#059669;}.scard.bl{border-left-color:#2563EB;}.scard.pu{border-left-color:#7C3AED;}
+  .sv{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--dk);}
+  .sl{font-size:11px;color:var(--mu);margin-top:4px;text-transform:uppercase;letter-spacing:1px;}
+  .sc{font-size:12px;color:#059669;margin-top:5px;}
+  /* CARD */
+  .card{background:var(--wh);border-radius:14px;padding:22px;box-shadow:var(--sh);margin-bottom:22px;}
+  .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:gap;}
+  .ct{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--m);}
+  /* TABLE */
+  .tw{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;padding:9px 12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mu);border-bottom:2px solid #F0E4DC;}
+  td{padding:11px 12px;border-bottom:1px solid #F5EAE0;vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:#FDFAF7;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;}
+  .b-new{background:#FEF3C7;color:#92400E;}.b-confirmed{background:#DBEAFE;color:#1E40AF;}.b-processing{background:#EDE9FE;color:#5B21B6;}.b-shipped{background:#CFFAFE;color:#0E7490;}.b-delivered{background:#D1FAE5;color:#065F46;}.b-cancelled{background:#FEE2E2;color:#991B1B;}
+  .b-unread{background:#FEF3C7;color:#92400E;}.b-read{background:#E5E7EB;color:#4B5563;}.b-replied{background:#D1FAE5;color:#065F46;}
+  .b-in{background:#D1FAE5;color:#065F46;}.b-out{background:#FEE2E2;color:#991B1B;}
+  /* FORM */
+  .fg{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .fg.full{grid-template-columns:1fr;}
+  .fm{margin-bottom:16px;}
+  .fl{display:block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--m);margin-bottom:6px;}
+  .fi,.fs,.ft{width:100%;padding:10px 14px;border:2px solid #E8D5C8;border-radius:8px;font-family:'Nunito Sans',sans-serif;font-size:13px;color:var(--tx);outline:none;transition:.2s;background:var(--cr);}
+  .fi:focus,.fs:focus,.ft:focus{border-color:var(--g);background:var(--wh);}
+  .ft{resize:vertical;min-height:80px;}
+  /* MODAL */
+  .mov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9990;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
+  .mov.open{display:flex;}
+  .mbox{background:var(--wh);border-radius:16px;max-width:680px;width:100%;max-height:92vh;overflow-y:auto;animation:su .25s ease;}
+  @keyframes su{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .mhd{padding:20px 26px 14px;border-bottom:1px solid #F0E4DC;display:flex;justify-content:space-between;align-items:center;}
+  .mhd h3{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--m);}
+  .mx{background:none;border:none;font-size:22px;cursor:pointer;color:var(--mu);}
+  .mbd{padding:22px 26px 26px;}
+  .dr{display:flex;gap:8px;padding:9px 0;border-bottom:1px solid #F5EAE0;font-size:13px;}
+  .dl{font-weight:700;color:var(--m);min-width:130px;}.dv{color:var(--tx);}
+  /* LOGIN */
+  .login{position:fixed;inset:0;background:linear-gradient(135deg,var(--m),var(--dk));display:flex;align-items:center;justify-content:center;z-index:9999;}
+  .lbox{background:var(--wh);border-radius:20px;padding:40px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .lbox h2{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--m);margin-bottom:6px;}
+  .lbox p{font-size:13px;color:var(--mu);margin-bottom:28px;}
+  .lerr{background:#FEE2E2;border:1px solid #FCA5A5;border-radius:8px;padding:12px;font-size:13px;color:#991B1B;margin-bottom:16px;display:none;}
+  /* TOAST */
+  .toast{position:fixed;bottom:22px;right:22px;background:var(--dk);color:var(--wh);padding:12px 20px;border-radius:10px;font-size:13px;z-index:99999;transform:translateY(80px);opacity:0;transition:.3s;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  /* IMAGE PREVIEW */
+  .img-preview{width:80px;height:80px;border-radius:8px;object-fit:cover;border:2px solid #E8D5C8;}
+  .thumb{width:60px;height:60px;background:linear-gradient(135deg,#FDF0E8,#F5E0D0);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden;flex-shrink:0;}
+  .thumb img{width:100%;height:100%;object-fit:cover;}
+  /* PAGINATION */
+  .pg{display:flex;gap:8px;align-items:center;margin-top:16px;justify-content:flex-end;}
+  .pg-btn{padding:6px 14px;border:2px solid var(--bd);border-radius:6px;background:var(--wh);cursor:pointer;font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--tx);}
+  .pg-btn:hover{border-color:var(--g);}.pg-btn.active{background:var(--m);color:var(--wh);border-color:var(--m);}
+  .empty{text-align:center;padding:50px;color:var(--mu);}
+  .empty .ei{font-size:44px;display:block;margin-bottom:10px;}
+  /* STATUS TIMELINE */
+  .timeline{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+  .tl-item{display:flex;gap:10px;align-items:flex-start;font-size:12px;}
+  .tl-dot{width:10px;height:10px;border-radius:50%;background:var(--g);flex-shrink:0;margin-top:2px;}
+  @media(max-width:768px){.sb{width:56px;}.sb-logo p,.ni span:not(.ic){display:none;}.main{margin-left:56px;}.fg{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="loginWrap">
+  <div class="lbox">
+    <h2>Admin Login</h2>
+    <p>PankhudiSaree Store Management</p>
+    <div class="lerr" id="lerr">Incorrect email or password.</div>
+    <form onsubmit="doLogin(event)">
+      <div class="fm"><label class="fl">Email</label><input type="email" class="fi" id="lEmail" required></div>
+      <div class="fm"><label class="fl">Password</label><input type="password" class="fi" id="lPass" placeholder="Password" required></div>
+      <button type="submit" class="btn bp" style="width:100%;justify-content:center;padding:13px;">🔐 Login</button>
+    </form>
+    <p style="font-size:11px;color:var(--mu);margin-top:14px;text-align:center;">Default: admin@rangmahal.com / Admin@123</p>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sb">
+  <div class="sb-logo"><a href="/" class="logo">Pankhudi<span>Saree</span></a><p>Admin Panel</p></div>
+  <nav>
+    <button class="ni active" onclick="goPage('dash',this)"><span class="ic">📊</span><span>Dashboard</span></button>
+    <button class="ni" onclick="goPage('products',this)"><span class="ic">🥻</span><span>Products</span></button>
+    <button class="ni" onclick="goPage('orders',this)"><span class="ic">📦</span><span>Orders</span></button>
+    <button class="ni" onclick="goPage('messages',this)"><span class="ic">💬</span><span>Messages <span id="unreadBadge"></span></span></button>
+  </nav>
+  <div class="sb-ft">
+    <a href="/" target="_blank">🌐 View Store</a>
+    <button onclick="doLogout()">🚪 Logout</button>
+    <button onclick="changePassword()">Change Password</button>  <!--ye line baad mein add hui -->
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <h1 id="pageTitle">Dashboard</h1>
+    <div class="topbar-r">
+      <span style="font-size:12px;color:var(--mu);" id="dbStatus"><span class="db-dot yellow"></span>Connecting…</span>
+      <a href="/" target="_blank" class="btn bo bs">🌐 Store</a>
+      <span style="font-size:12px;color:var(--mu);" id="adminName"></span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="p-dash">
+      <div class="stats" id="statsGrid">
+        <div class="scard red"><div class="sv" id="sProducts">—</div><div class="sl">Products</div></div>
+        <div class="scard"><div class="sv" id="sOrders">—</div><div class="sl">Total Orders</div><div class="sc" id="sNew">— new</div></div>
+        <div class="scard gr"><div class="sv" id="sRevenue">—</div><div class="sl">Revenue</div></div>
+        <div class="scard bl"><div class="sv" id="sToday">—</div><div class="sl">Today's Orders</div></div>
+        <div class="scard pu"><div class="sv" id="sMsgs">—</div><div class="sl">Messages</div><div class="sc" id="sUnread">— unread</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="card"><div class="ch"><div class="ct">Recent Orders</div><button class="btn bo bs" onclick="goPage('orders',document.querySelectorAll('.ni')[2])">View All</button></div><div id="dashOrders"></div></div>
+        <div class="card"><div class="ch"><div class="ct">Recent Messages</div><button class="btn bo bs" onclick="goPage('messages',document.querySelectorAll('.ni')[3])">View All</button></div><div id="dashMsgs"></div></div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="page" id="p-products">
+      <div class="card">
+        <div class="ch">
+          <div class="ct">🥻 Product Catalog</div>
+          <button class="btn bp" onclick="openProdModal()">+ Add New Saree</button>
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Photo</th><th>Name</th><th>Type</th><th>Price</th><th>Stock</th><th>Badge</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="prodTb"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--mu);">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="page" id="p-orders">
+      <div class="card">
+        <div class="ch" style="flex-wrap:wrap;gap:12px;">
+          <div class="ct">📦 Orders</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <input type="text" class="fi" id="orderSearch" placeholder="🔍 Search by name, phone, order ID…" style="width:240px;" oninput="loadOrders()">
+            <select class="fs" id="orderStatus" onchange="loadOrders()" style="width:160px;"><option value="">All Status</option><option value="new">New</option><option value="confirmed">Confirmed</option><option value="processing">Processing</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select>
+          </div>
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Order #</th><th>Customer</th><th>Phone</th><th>Saree</th><th>Qty</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="orderTb"><tr><td colspan="10" style="text-align:center;padding:30px;color:var(--mu);">Loading…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="pg" id="orderPg"></div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="page" id="p-messages">
+      <div class="card">
+        <div class="ch">
+          <div class="ct">💬 Customer Messages</div>
+          <select class="fs" id="msgFilter" onchange="loadMessages()" style="width:160px;"><option value="">All</option><option value="unread">Unread</option><option value="read">Read</option><option value="replied">Replied</option></select>
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Name</th><th>Contact</th><th>Message</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="msgTb"><tr><td colspan="6" style="text-align:center;padding:30px;color:var(--mu);">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="mov" id="prodModal">
+  <div class="mbox">
+    <div class="mhd"><h3 id="pmTitle">Add New Saree</h3><button onclick="closeProdModal()" class="mx">✕</button></div>
+    <div class="mbd">
+      <input type="hidden" id="editId">
+      <div class="fg">
+        <div class="fm"><label class="fl">Saree Name *</label><input type="text" class="fi" id="pName" placeholder="e.g. Royal Banarasi Silk" required></div>
+        <div class="fm"><label class="fl">Type *</label><select class="fs" id="pType"><option>Banarasi</option><option>Kanjivaram</option><option>Chanderi</option><option>Chiffon</option><option>Organza</option><option>Cotton</option><option>Other</option></select></div>
+        <div class="fm"><label class="fl">Price (₹) *</label><input type="number" class="fi" id="pPrice" placeholder="2499" required></div>
+        <div class="fm"><label class="fl">Original Price (₹)</label><input type="number" class="fi" id="pOld" placeholder="3200"></div>
+        <div class="fm"><label class="fl">Color</label><input type="text" class="fi" id="pColor" placeholder="Red, Multi, Gold…"></div>
+        <div class="fm"><label class="fl">Stock Qty</label><input type="number" class="fi" id="pStock" placeholder="10" min="0"></div>
+        <div class="fm"><label class="fl">Rating (1–5)</label><input type="number" class="fi" id="pRating" placeholder="5" min="1" max="5" step="0.1"></div>
+        <div class="fm"><label class="fl">Review Count</label><input type="number" class="fi" id="pReviews" placeholder="0"></div>
+        <div class="fm"><label class="fl">Badge</label><select class="fs" id="pBadge"><option value="">None</option><option value="new">🆕 New</option><option value="sale">🔥 Sale</option><option value="bestseller">⭐ Bestseller</option><option value="premium">💎 Premium</option></select></div>
+        <div class="fm"><label class="fl">Emoji (fallback)</label><input type="text" class="fi" id="pEmoji" placeholder="🥻"></div>
+      </div>
+      <div class="fm fg full">
+        <div>
+          <label class="fl">Upload Image</label>
+          <input type="file" class="fi" id="pFile" accept="image/*" onchange="previewImg(this)">
+          <img id="imgPreview" class="img-preview" style="display:none;margin-top:8px;">
+        </div>
+        <div>
+          <label class="fl">Or Paste Image URL</label>
+          <input type="url" class="fi" id="pImgUrl" placeholder="https://…/saree.jpg" oninput="previewUrl(this)">
+        </div>
+      </div>
+      <div class="fm fg full">
+        <div><label class="fl">Description</label><textarea class="ft" id="pDesc" placeholder="Fabric, weave, occasion…"></textarea></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button class="btn bp" style="flex:1;justify-content:center;padding:13px;" onclick="saveProd()">💾 Save Saree</button>
+        <button class="btn bo" onclick="closeProdModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER DETAIL MODAL -->
+<div class="mov" id="orderModal">
+  <div class="mbox">
+    <div class="mhd"><h3>Order Details</h3><button onclick="document.getElementById('orderModal').classList.remove('open')" class="mx">✕</button></div>
+    <div class="mbd" id="orderMbd"></div>
+  </div>
+</div>
+
+<!-- MESSAGE MODAL -->
+<div class="mov" id="msgModal">
+  <div class="mbox">
+    <div class="mhd"><h3>Message Details</h3><button onclick="document.getElementById('msgModal').classList.remove('open')" class="mx">✕</button></div>
+    <div class="mbd" id="msgMbd"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '';
+let token = localStorage.getItem('rm_token') || '';
+let currentPage = 'dash';
+
+// ─── AUTH ─────────────────────────────────────────────────────────
+async function doLogin(e) {
+  e.preventDefault();
+  const err = document.getElementById('lerr');
+  err.style.display = 'none';
+  try {
+    const res = await fetch(`${API}/api/auth/login`, {
+      method: 'POST', credentials: 'include',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email: document.getElementById('lEmail').value, password: document.getElementById('lPass').value })
+    });
+    const data = await res.json();
+    if (!data.success) { err.style.display='block'; err.textContent=data.message; return; }
+    token = data.token;
+    localStorage.setItem('rm_token', token);
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('adminName').textContent = '👤 ' + data.admin.name;
+    setDbStatus(true);
+    loadAll();
+  } catch(e) { err.style.display='block'; err.textContent='Server error. Make sure the Node.js server is running.'; }
+}
+
+async function doLogout() {
+  await fetch(`${API}/api/auth/logout`, { method:'POST', credentials:'include' });
+  token = ''; localStorage.removeItem('rm_token');
+  document.getElementById('loginWrap').style.display = 'flex';
+}
+
+function authHeaders() { return { 'Content-Type':'application/json', 'Authorization':'Bearer '+token }; }
+
+function setDbStatus(ok) {
+  const el = document.getElementById('dbStatus');
+  el.innerHTML = ok ? '<span class="db-dot green"></span>Connected' : '<span class="db-dot red"></span>Disconnected';
+}
+
+// Check existing session
+(async () => {
+  if (!token) return;
+  try {
+    const res = await fetch(`${API}/api/auth/me`, { headers: authHeaders(), credentials:'include' });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('adminName').textContent = '👤 ' + data.admin.name;
+      setDbStatus(true); loadAll();
+    } else { token=''; localStorage.removeItem('rm_token'); }
+  } catch(e) {}
+})();
+
+// ─── LOAD ALL ─────────────────────────────────────────────────────
+async function loadAll() {
+  loadStats(); loadDash(); loadProducts(); loadOrders(); loadMessages();
+}
+
+// ─── STATS ────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const res = await fetch(`${API}/api/orders/stats/summary`, { headers: authHeaders(), credentials:'include' });
+    const data = await res.json();
+    if (!data.success) return;
+    const s = data.stats;
+    document.getElementById('sProducts').textContent = s.total_products;
+    document.getElementById('sOrders').textContent = s.total_orders;
+    document.getElementById('sNew').textContent = s.new_orders + ' new';
+    document.getElementById('sRevenue').textContent = '₹' + (s.total_revenue||0).toLocaleString();
+    document.getElementById('sToday').textContent = s.today_orders;
+    document.getElementById('sMsgs').textContent = s.total_orders > 0 ? s.unread_messages + (s.total_orders > 0 ? '' : '') : s.unread_messages;
+    document.getElementById('sUnread').textContent = s.unread_messages + ' unread';
+    const ub = document.getElementById('unreadBadge');
+    ub.textContent = s.unread_messages > 0 ? ` (${s.unread_messages})` : '';
+  } catch(e) {}
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────
+async function loadDash() {
+  try {
+    const [oRes, mRes] = await Promise.all([
+      fetch(`${API}/api/orders?limit=5`, { headers: authHeaders(), credentials:'include' }),
+      fetch(`${API}/api/messages?limit=5`, { headers: authHeaders(), credentials:'include' })
+    ]);
+    const oData = await oRes.json(), mData = await mRes.json();
+    const dashO = document.getElementById('dashOrders');
+    if (oData.success && oData.orders.length) {
+      dashO.innerHTML = `<table style="width:100%;font-size:12px;"><thead><tr><th>Order #</th><th>Customer</th><th>Saree</th><th>Status</th></tr></thead><tbody>
+        ${oData.orders.slice(0,5).map(o=>`<tr><td><strong>${o.order_number}</strong></td><td>${o.customer_name}</td><td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.saree_name}</td><td><span class="badge b-${o.status}">${o.status}</span></td></tr>`).join('')}
+      </tbody></table>`;
+    } else dashO.innerHTML = '<div class="empty"><span class="ei">📦</span>No orders yet</div>';
+
+    const dashM = document.getElementById('dashMsgs');
+    if (mData.success && mData.messages.length) {
+      dashM.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px;">${mData.messages.slice(0,5).map(m=>`<div style="padding:10px;background:#FDFAF7;border-radius:8px;border-left:3px solid ${m.status==='unread'?'var(--g)':'#E5E7EB'};">
+        <div style="font-weight:700;font-size:13px;">${m.name} <span class="badge b-${m.status}">${m.status}</span></div>
+        <div style="font-size:12px;color:var(--mu);margin-top:3px;">${(m.message||'').slice(0,70)}…</div>
+      </div>`).join('')}</div>`;
+    } else dashM.innerHTML = '<div class="empty"><span class="ei">💬</span>No messages yet</div>';
+  } catch(e) {}
+}
+
+// ─── PRODUCTS ─────────────────────────────────────────────────────
+async function loadProducts() {
+  try {
+    const res = await fetch(`${API}/api/sarees/admin/all`, { headers: authHeaders(), credentials:'include' });
+    const data = await res.json();
+    if (!data.success) return;
+    const tb = document.getElementById('prodTb');
+    if (!data.sarees.length) { tb.innerHTML='<tr><td colspan="8"><div class="empty"><span class="ei">🥻</span>No sarees yet. Add your first!</div></td></tr>'; return; }
+    tb.innerHTML = data.sarees.map(p => `<tr>
+      <td><div class="thumb">${p.image_url?`<img src="${API}${p.image_url}" alt="${p.name}">`:(p.emoji||'🥻')}</div></td>
+      <td><strong>${p.name}</strong><div style="font-size:11px;color:var(--mu);">${p.color||''}</div></td>
+      <td>${p.type}</td>
+      <td><strong>₹${Number(p.price).toLocaleString()}</strong>${p.old_price?`<br><span style="font-size:11px;color:var(--mu);text-decoration:line-through;">₹${Number(p.old_price).toLocaleString()}</span>`:''}</td>
+      <td><span class="badge ${Number(p.stock||0)>0?'b-in':'b-out'}">${p.stock!=null?p.stock:'—'}</span></td>
+      <td>${p.badge?`<span class="badge b-new">${p.badge}</span>`:'—'}</td>
+      <td><span class="badge ${p.is_active?'b-in':'b-out'}">${p.is_active?'Active':'Hidden'}</span></td>
+      <td style="white-space:nowrap;">
+        <button class="btn bo bs" onclick="editProd(${p.id})" style="margin-right:5px;">✏️</button>
+        <button class="btn bdr bs" onclick="deleteProd(${p.id})">🗑️</button>
+      </td></tr>`).join('');
+  } catch(e) { showToast('❌ Error loading products'); }
+}
+
+// ─── PRODUCT MODAL ────────────────────────────────────────────────
+let allProdsCache = [];
+window.openProdModal = function(p) {
+  document.getElementById('editId').value = p ? p.id : '';
+  document.getElementById('pmTitle').textContent = p ? 'Edit Saree' : 'Add New Saree';
+  document.getElementById('pName').value = p?.name || '';
+  document.getElementById('pType').value = p?.type || 'Banarasi';
+  document.getElementById('pPrice').value = p?.price || '';
+  document.getElementById('pOld').value = p?.old_price || '';
+  document.getElementById('pColor').value = p?.color || '';
+  document.getElementById('pStock').value = p?.stock ?? '';
+  document.getElementById('pRating').value = p?.rating || 5;
+  document.getElementById('pReviews').value = p?.reviews || 0;
+  document.getElementById('pBadge').value = p?.badge || '';
+  document.getElementById('pEmoji').value = p?.emoji || '🥻';
+  document.getElementById('pImgUrl').value = p?.image_url || '';
+  document.getElementById('pDesc').value = p?.description || '';
+  document.getElementById('pFile').value = '';
+  const prev = document.getElementById('imgPreview');
+  if (p?.image_url) { prev.src = API + p.image_url; prev.style.display = 'block'; }
+  else prev.style.display = 'none';
+  document.getElementById('prodModal').classList.add('open');
+};
+window.closeProdModal = () => document.getElementById('prodModal').classList.remove('open');
+
+window.previewImg = function(input) {
+  const f = input.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => { const img = document.getElementById('imgPreview'); img.src = e.target.result; img.style.display = 'block'; };
+  r.readAsDataURL(f);
+};
+window.previewUrl = function(input) {
+  const img = document.getElementById('imgPreview');
+  if (input.value) { img.src = input.value; img.style.display = 'block'; }
+  else img.style.display = 'none';
+};
+
+async function editProd(id) {
+  try {
+    const res = await fetch(`${API}/api/sarees/${id}`, { headers: authHeaders() });
+    const data = await res.json();
+    if (data.success) openProdModal(data.saree);
+  } catch(e) { showToast('❌ Error loading saree'); }
+}
+
+window.saveProd = async function() {
+  const id = document.getElementById('editId').value;
+  const fd = new FormData();
+  ['pName','pType','pPrice','pOld','pColor','pStock','pRating','pReviews','pBadge','pEmoji','pImgUrl','pDesc'].forEach(f => {
+    const map = {pName:'name',pType:'type',pPrice:'price',pOld:'old_price',pColor:'color',pStock:'stock',pRating:'rating',pReviews:'reviews',pBadge:'badge',pEmoji:'emoji',pImgUrl:'image_url',pDesc:'description'};
+    fd.append(map[f], document.getElementById(f).value);
+  });
+  const file = document.getElementById('pFile').files[0];
+  if (file) fd.append('image', file);
+
+  if (!document.getElementById('pName').value || !document.getElementById('pPrice').value) {
+    showToast('❌ Name and Price required!'); return;
+  }
+
+  try {
+    const url = id ? `${API}/api/sarees/${id}` : `${API}/api/sarees`;
+    const res = await fetch(url, {
+      method: id ? 'PUT' : 'POST',
+      headers: { 'Authorization': 'Bearer ' + token },
+      credentials: 'include', body: fd
+    });
+    const data = await res.json();
+    if (!data.success) { showToast('❌ ' + data.message); return; }
+    closeProdModal(); loadProducts(); loadStats();
+    showToast(id ? '✅ Saree updated!' : '✅ Saree added!');
+  } catch(e) { showToast('❌ Error saving saree'); }
+};
+
+async function deleteProd(id) {
+  if (!confirm('Remove this saree from store?')) return;
+  try {
+    const res = await fetch(`${API}/api/sarees/${id}`, { method:'DELETE', headers: authHeaders(), credentials:'include' });
+    const data = await res.json();
+    if (data.success) { loadProducts(); loadStats(); showToast('🗑️ Saree removed.'); }
+    else showToast('❌ ' + data.message);
+  } catch(e) { showToast('❌ Error'); }
+}
+
+// ─── ORDERS ───────────────────────────────────────────────────────
+let orderOffset = 0;
+async function loadOrders() {
+  const status = document.getElementById('orderStatus').value;
+  const search = document.getElementById('orderSearch').value;
+  const params = new URLSearchParams({ limit:50, offset:orderOffset });
+  if (status) params.set('status', status);
+  if (search) params.set('search', search);
+  try {
+    const res = await fetch(`${API}/api/orders?${params}`, { headers: authHeaders(), credentials:'include' });
+    const data = await res.json();
+    if (!data.success) return;
+    const tb = document.getElementById('orderTb');
+    if (!data.orders.length) { tb.innerHTML='<tr><td colspan="10"><div class="empty"><span class="ei">📦</span>No orders found</div></td></tr>'; return; }
+    tb.innerHTML = data.orders.map(o => {
+      const dt = o.created_at ? new Date(o.created_at).toLocaleDateString('en-IN') : '—';
+      return `<tr>
+        <td><strong>${o.order_number}</strong></td>
+        <td>${o.customer_name}</td>
+        <td><a href="tel:${o.customer_phone}" style="color:var(--m);">${o.customer_phone}</a></td>
+        <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.saree_name}</td>
+        <td>${o.quantity}</td>
+        <td>${o.total_amount ? '₹'+Number(o.total_amount).toLocaleString() : '—'}</td>
+        <td style="font-size:12px;">${o.payment_method||'—'}</td>
+        <td>
+          <select class="fs" style="padding:4px 8px;font-size:12px;width:120px;" onchange="updateStatus(${o.id},this.value)">
+            ${['new','confirmed','processing','shipped','delivered','cancelled'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+          </select>
+        </td>
+        <td style="font-size:12px;">${dt}</td>
+        <td><button class="btn bo bs" onclick="viewOrder(${o.id})">View</button></td></tr>`;
+    }).join('');
+  } catch(e) { showToast('❌ Error loading orders'); }
+}
+
+async function updateStatus(id, status) {
+  try {
+    const res = await fetch(`${API}/api/orders/${id}/status`, {
+      method: 'PATCH', headers: authHeaders(), credentials: 'include',
+      body: JSON.stringify({ status })
+    });
+    const data = await res.json();
+    if (data.success) { loadStats(); showToast('✅ Status: ' + status); }
+    else showToast('❌ ' + data.message);
+  } catch(e) { showToast('❌ Error'); }
+}
+
+async function viewOrder(id) {
+  try {
+    const res = await fetch(`${API}/api/orders/${id}`, { headers: authHeaders(), credentials:'include' });
+    const data = await res.json();
+    if (!data.success) return;
+    const o = data.order;
+    const dt = o.created_at ? new Date(o.created_at).toLocaleString('en-IN') : '—';
+    const cartRows = (o.cart_items||[]).map(i=>`<div style="padding:5px 0;font-size:12px;">• ${i.name} × ${i.qty} — ₹${Number(i.price).toLocaleString()}</div>`).join('');
+    const logs = (o.status_log||[]).map(l=>`<div class="tl-item"><div class="tl-dot"></div><div><strong>${l.new_status}</strong> — ${new Date(l.changed_at).toLocaleString('en-IN')} ${l.note?`(${l.note})`:''}</div></div>`).join('');
+    document.getElementById('orderMbd').innerHTML = `
+      <div class="dr"><div class="dl">Order Number</div><div class="dv"><strong>${o.order_number}</strong></div></div>
+      <div class="dr"><div class="dl">Customer</div><div class="dv">${o.customer_name}</div></div>
+      <div class="dr"><div class="dl">Phone</div><div class="dv"><a href="tel:${o.customer_phone}" style="color:var(--m);">${o.customer_phone}</a></div></div>
+      <div class="dr"><div class="dl">Email</div><div class="dv">${o.customer_email||'—'}</div></div>
+      <div class="dr"><div class="dl">Address</div><div class="dv">${o.address}, ${o.pincode}</div></div>
+      <div class="dr"><div class="dl">Saree</div><div class="dv">${o.saree_name}</div></div>
+      <div class="dr"><div class="dl">Color Preference</div><div class="dv">${o.color_preference||'—'}</div></div>
+      <div class="dr"><div class="dl">Quantity</div><div class="dv">${o.quantity}</div></div>
+      <div class="dr"><div class="dl">Total Amount</div><div class="dv">${o.total_amount?'₹'+Number(o.total_amount).toLocaleString():'—'}</div></div>
+      <div class="dr"><div class="dl">Payment</div><div class="dv">${o.payment_method}</div></div>
+      <div class="dr"><div class="dl">Notes</div><div class="dv">${o.special_notes||'—'}</div></div>
+      ${cartRows?`<div class="dr"><div class="dl">Cart Items</div><div class="dv">${cartRows}</div></div>`:''}
+      <div class="dr"><div class="dl">Status</div><div class="dv"><span class="badge b-${o.status}">${o.status}</span></div></div>
+      <div class="dr"><div class="dl">Tracking No.</div><div class="dv">
+        <input type="text" class="fi" id="trackingInput" value="${o.tracking_number||''}" placeholder="Enter tracking number" style="width:180px;">
+        <button onclick="saveTracking(${o.id})" class="btn bo bs" style="margin-left:6px;">Save</button>
+      </div></div>
+      <div class="dr"><div class="dl">Date</div><div class="dv">${dt}</div></div>
+      ${logs?`<div style="margin-top:14px;"><strong style="font-size:12px;color:var(--mu);">STATUS HISTORY</strong><div class="timeline" style="margin-top:8px;">${logs}</div></div>`:''}
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+        <a href="https://wa.me/${(o.customer_phone||'').replace(/\D/g,'').slice(-10).padStart(12,'91')}?text=Namaste%20${encodeURIComponent(o.customer_name)}!%20Your%20RangMahal%20order%20${o.order_number}%20status%20is%3A%20${encodeURIComponent(o.status)}." target="_blank" class="btn bsu">📱 WhatsApp</a>
+        <button onclick="document.getElementById('orderModal').classList.remove('open')" class="btn bo">Close</button>
+      </div>`;
+    document.getElementById('orderModal').classList.add('open');
+  } catch(e) { showToast('❌ Error loading order'); }
+}
+
+async function saveTracking(id) {
+  const tn = document.getElementById('trackingInput').value.trim();
+  try {
+    const res = await fetch(`${API}/api/orders/${id}/status`, {
+      method: 'PATCH', headers: authHeaders(), credentials: 'include',
+      body: JSON.stringify({ status: 'shipped', tracking_number: tn, note: 'Tracking number added' })
+    });
+    const data = await res.json();
+    if (data.success) showToast('✅ Tracking number saved & status set to Shipped!');
+  } catch(e) {}
+}
+
+// ─── MESSAGES ─────────────────────────────────────────────────────
+async function loadMessages() {
+  const filter = document.getElementById('msgFilter').value;
+  const params = filter ? '?status=' + filter : '';
+  try {
+    const res = await fetch(`${API}/api/messages${params}`, { headers: authHeaders(), credentials:'include' });
+    const data = await res.json();
+    if (!data.success) return;
+    const tb = document.getElementById('msgTb');
+    if (!data.messages.length) { tb.innerHTML='<tr><td colspan="6"><div class="empty"><span class="ei">💬</span>No messages found</div></td></tr>'; return; }
+    tb.innerHTML = data.messages.map(m => {
+      const dt = m.created_at ? new Date(m.created_at).toLocaleDateString('en-IN') : '—';
+      return `<tr style="${m.status==='unread'?'font-weight:700;':''}" >
+        <td>${m.name}</td>
+        <td><a href="tel:${m.contact}" style="color:var(--m);">${m.contact}</a></td>
+        <td style="max-width:200px;">${(m.message||'').slice(0,70)}${m.message?.length>70?'…':''}</td>
+        <td><span class="badge b-${m.status||'unread'}">${m.status||'unread'}</span></td>
+        <td style="font-size:12px;">${dt}</td>
+        <td style="white-space:nowrap;">
+          <button class="btn bo bs" onclick="viewMsg(${m.id})" style="margin-right:4px;">View</button>
+          ${m.status==='unread'?`<button class="btn bsu bs" onclick="markMsg(${m.id},'read')">✓ Read</button>`:''}
+        </td></tr>`;
+    }).join('');
+    // Update unread badge
+    const unread = data.messages.filter(m=>m.status==='unread').length;
+    document.getElementById('unreadBadge').textContent = unread > 0 ? ` (${unread})` : '';
+  } catch(e) { showToast('❌ Error loading messages'); }
+}
+
+async function markMsg(id, status) {
+  try {
+    const res = await fetch(`${API}/api/messages/${id}/status`, {
+      method: 'PATCH', headers: authHeaders(), credentials: 'include',
+      body: JSON.stringify({ status })
+    });
+    const data = await res.json();
+    if (data.success) { loadMessages(); loadStats(); showToast('✅ Marked as ' + status); }
+  } catch(e) {}
+}
+
+async function viewMsg(id) {
+  // Fetch all and find by id since we don't have a single GET endpoint
+  try {
+    const res = await fetch(`${API}/api/messages`, { headers: authHeaders(), credentials:'include' });
+    const data = await res.json();
+    if (!data.success) return;
+    const m = data.messages.find(x=>x.id===id); if(!m) return;
+    const dt = m.created_at ? new Date(m.created_at).toLocaleString('en-IN') : '—';
+    document.getElementById('msgMbd').innerHTML = `
+      <div class="dr"><div class="dl">Name</div><div class="dv"><strong>${m.name}</strong></div></div>
+      <div class="dr"><div class="dl">Contact</div><div class="dv"><a href="tel:${m.contact}" style="color:var(--m);">${m.contact}</a></div></div>
+      <div class="dr"><div class="dl">Message</div><div class="dv" style="line-height:1.6;">${m.message}</div></div>
+      <div class="dr"><div class="dl">Status</div><div class="dv"><span class="badge b-${m.status}">${m.status}</span></div></div>
+      <div class="dr"><div class="dl">Date</div><div class="dv">${dt}</div></div>
+      ${m.reply_note?`<div class="dr"><div class="dl">Reply Note</div><div class="dv">${m.reply_note}</div></div>`:''}
+      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="https://wa.me/${m.contact.replace(/\D/g,'')}" target="_blank" class="btn bsu">📱 WhatsApp</a>
+        <a href="mailto:${m.contact}" class="btn bo">📧 Email</a>
+        <button onclick="markMsg(${m.id},'replied');document.getElementById('msgModal').classList.remove('open')" class="btn bg">✓ Mark Replied</button>
+        <button onclick="document.getElementById('msgModal').classList.remove('open')" class="btn bo">Close</button>
+      </div>`;
+    document.getElementById('msgModal').classList.add('open');
+    if (m.status === 'unread') markMsg(m.id, 'read');
+  } catch(e) {}
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────────
+window.goPage = function(name, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+name).classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  currentPage = name;
+  document.getElementById('pageTitle').textContent = {dash:'Dashboard',products:'Products',orders:'Orders',messages:'Messages'}[name];
+};
+
+// ─── TOAST ────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg;
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+//Baad mein add ki gai
+
+async function changePassword() {
+  const email = prompt("Enter your email:");
+  const newPassword = prompt("Enter new password:");
+
+  const res = await fetch("http://localhost:3000/api/change-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, newPassword })
+  });
+
+  const data = await res.json();
+  alert(data.message);
+}
+//khatam line baads wali
+
+</script>
+</body>
+</html>
