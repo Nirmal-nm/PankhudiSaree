@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../db");
 const bcrypt = require("bcrypt");
 
+console.log("userAuth.js loaded");
 // ✅ SIGNUP API
 router.post("/signup", async (req, res) => {
   try {
