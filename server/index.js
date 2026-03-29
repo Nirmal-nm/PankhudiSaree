@@ -1,3 +1,4 @@
+console.log("SERVER STARTED 🔥");
 // ─── API Routes ───────────────────────────────────────────────
 app.use('/api/auth',     require('./routes/auth'));
 app.use('/api/sarees',   require('./routes/sarees'));
