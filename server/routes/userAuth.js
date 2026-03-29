@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 console.log("userAuth.js loaded");
 
@@ -11,6 +12,11 @@ console.log("userAuth.js loaded");
 router.post("/signup", async (req, res) => {
   try {
     const { name, phone, password } = req.body;
+
+    // 🛑 validation
+    if (!name || !phone || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     const [existing] = await db.query(
       "SELECT * FROM users WHERE phone = ?",
@@ -31,15 +37,21 @@ router.post("/signup", async (req, res) => {
     res.json({ message: "Signup successful" });
 
   } catch (err) {
-    console.error(err);
+    console.error("Signup error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// ✅ LOGIN API (ONLY ONCE)
+
+// ✅ LOGIN API (FINAL)
 router.post("/login", async (req, res) => {
   try {
     const { phone, password } = req.body;
+
+    // 🛑 validation
+    if (!phone || !password) {
+      return res.status(400).json({ message: "Phone and password required" });
+    }
 
     const [users] = await db.query(
       "SELECT * FROM users WHERE phone = ?",
@@ -58,8 +70,16 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Wrong password" });
     }
 
+    // ✅ fallback secret (IMPORTANT FIX)
+    const token = jwt.sign(
+      { id: user.id, phone: user.phone },
+      process.env.JWT_SECRET || "rangmahal_secret",
+      { expiresIn: "7d" }
+    );
+
     res.json({
       message: "Login successful",
+      token,
       user: {
         id: user.id,
         name: user.name,
@@ -68,9 +88,18 @@ router.post("/login", async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("Login error:", err);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+const { requireUserAuth } = require("../middleware/auth");
+
+router.get("/profile", requireUserAuth, (req, res) => {
+  res.json({
+    message: "User profile 🔐",
+    user: req.user
+  });
 });
 
 module.exports = router;
