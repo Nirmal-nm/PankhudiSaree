@@ -7,25 +7,62 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{--maroon:#6B1A2A;--gold:#C9923E;--gold-light:#E8C07A;--cream:#FDF6EC;--dark:#1A0A0E;--text:#2D1B22;--muted:#7A5C65;--border:rgba(107,26,42,0.15);--white:#fff;--shadow:0 8px 40px rgba(107,26,42,0.12);}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
   body{font-family:'Nunito Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+  /* TOPBAR */
   .topbar{background:var(--maroon);color:var(--gold-light);text-align:center;padding:9px;font-size:13px;letter-spacing:.8px;}
+
+  /* NAVBAR */
   nav{background:var(--white);position:sticky;top:0;z-index:999;box-shadow:0 2px 20px rgba(0,0,0,0.08);}
-  .nav-inner{max-width:1300px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;}
+  .nav-inner{max-width:1300px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:12px;}
   .logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--maroon);text-decoration:none;}
   .logo span{color:var(--gold);}
   .nav-links{display:flex;gap:28px;list-style:none;}
   .nav-links a{text-decoration:none;color:var(--text);font-size:14px;font-weight:600;letter-spacing:.5px;transition:.2s;position:relative;}
   .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--gold);transition:.3s;}
-  .nav-links a:hover::after{width:100%;}.nav-links a:hover{color:var(--maroon);}
-  .nav-actions{display:flex;gap:12px;align-items:center;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-links a:hover{color:var(--maroon);}
+  .nav-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
   .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:.2s;text-decoration:none;border:none;font-family:'Nunito Sans',sans-serif;}
-  .btn-primary{background:var(--maroon);color:var(--white);}.btn-primary:hover{background:#8B2235;transform:translateY(-1px);}
-  .btn-outline{background:transparent;color:var(--maroon);border:2px solid var(--maroon);}.btn-outline:hover{background:var(--maroon);color:var(--white);}
-  .btn-gold{background:var(--gold);color:var(--white);}.btn-gold:hover{background:#B8822E;transform:translateY(-2px);}
-  .btn-ghost{border:2px solid rgba(255,255,255,.4);color:var(--white);}.btn-ghost:hover{border-color:var(--gold-light);color:var(--gold-light);}
+  .btn-primary{background:var(--maroon);color:var(--white);}
+  .btn-primary:hover{background:#8B2235;transform:translateY(-1px);}
+  .btn-outline{background:transparent;color:var(--maroon);border:2px solid var(--maroon);}
+  .btn-outline:hover{background:var(--maroon);color:var(--white);}
+  .btn-gold{background:var(--gold);color:var(--white);}
+  .btn-gold:hover{background:#B8822E;transform:translateY(-2px);}
+  .btn-ghost{border:2px solid rgba(255,255,255,.4);color:var(--white);}
+  .btn-ghost:hover{border-color:var(--gold-light);color:var(--gold-light);}
   .cart-btn{position:relative;background:none;border:none;cursor:pointer;font-size:22px;color:var(--maroon);}
   .cart-count{position:absolute;top:-6px;right:-8px;background:var(--gold);color:var(--white);border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+  /* ── FIX 1: Auth Buttons ────────────────────────────────────── */
+  #authSection{display:flex;gap:8px;align-items:center;}
+  .auth-login-btn{padding:8px 16px;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:var(--maroon);border:2px solid var(--maroon);font-family:'Nunito Sans',sans-serif;transition:.3s;}
+  .auth-login-btn:hover{background:var(--maroon);color:var(--white);transform:translateY(-2px);box-shadow:0 4px 12px rgba(107,26,42,0.25);}
+  .auth-signup-btn{padding:8px 16px;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--white);border:none;font-family:'Nunito Sans',sans-serif;transition:.3s;}
+  .auth-signup-btn:hover{background:linear-gradient(135deg,#B8822E,#C9923E);transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,146,62,0.35);}
+  #userSection{display:none;align-items:center;gap:10px;}
+  #userSection span{font-weight:700;color:var(--maroon);font-size:14px;}
+  #userSection button{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--muted);border:2px solid var(--border);font-family:'Nunito Sans',sans-serif;transition:.2s;}
+  #userSection button:hover{border-color:var(--maroon);color:var(--maroon);}
+
+  /* ── FIX 2: Modal Styles (Login & Signup) ────────────────────── */
+  .auth-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
+  .auth-modal-overlay.open{display:flex;}
+  .auth-modal-box{background:var(--white);border-radius:20px;max-width:420px;width:100%;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:su .3s ease;}
+  @keyframes su{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .auth-modal-box h2{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--maroon);margin-bottom:6px;}
+  .auth-modal-box p{font-size:13px;color:var(--muted);margin-bottom:24px;}
+  .auth-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:8px;font-family:'Nunito Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:.2s;background:var(--cream);margin-bottom:14px;display:block;}
+  .auth-input:focus{border-color:var(--gold);background:var(--white);}
+  .auth-modal-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13px;color:var(--muted);}
+  .auth-modal-footer a{color:var(--gold);text-decoration:none;font-weight:700;}
+  .auth-modal-footer a:hover{color:var(--maroon);}
+  .auth-error{background:#FEE2E2;border:1px solid #FCA5A5;border-radius:8px;padding:10px 14px;font-size:13px;color:#991B1B;margin-bottom:14px;display:none;}
+  .auth-success{background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;padding:10px 14px;font-size:13px;color:#065F46;margin-bottom:14px;display:none;}
+
   /* HERO */
   .hero{min-height:92vh;background:linear-gradient(135deg,var(--maroon) 0%,#3D0F1A 60%,#1A0A0E 100%);display:flex;align-items:center;overflow:hidden;position:relative;}
   .hero-bg{position:absolute;inset:0;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23C9923E' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
@@ -41,13 +78,15 @@
   .hero-card{background:rgba(255,255,255,.08);border-radius:12px;overflow:hidden;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:60px;border:1px solid rgba(201,146,62,.2);transition:.3s;}
   .hero-card:hover{transform:scale(1.03);border-color:var(--gold);}
   .hero-card.tall{grid-row:span 2;aspect-ratio:auto;font-size:90px;}
+
   /* MARQUEE */
   .marquee-wrap{background:var(--gold);padding:12px 0;overflow:hidden;white-space:nowrap;}
   .marquee-track{display:inline-block;animation:ticker 22s linear infinite;}
   @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
   .marquee-track span{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--white);margin:0 32px;}
   .marquee-track span::before{content:'✦ ';}
-  /* SECTION */
+
+  /* SECTIONS */
   section{padding:80px 0;}
   .container{max-width:1300px;margin:auto;padding:0 24px;}
   .sec-tag{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
@@ -55,12 +94,16 @@
   .sec-title em{color:var(--gold);font-style:italic;}
   .sec-sub{color:var(--muted);margin-top:12px;font-size:15px;}
   .sec-header{text-align:center;margin-bottom:50px;}
+
   /* CATEGORIES */
   .cat-sec{background:var(--white);}
   .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;}
   .cat-card{background:var(--cream);border-radius:12px;padding:28px 20px;text-align:center;cursor:pointer;transition:.3s;border:2px solid transparent;}
   .cat-card:hover,.cat-card.active{border-color:var(--gold);background:var(--white);box-shadow:var(--shadow);}
-  .cat-icon{font-size:40px;margin-bottom:12px;}.cat-name{font-size:14px;font-weight:700;color:var(--maroon);}.cat-cnt{font-size:12px;color:var(--muted);margin-top:4px;}
+  .cat-icon{font-size:40px;margin-bottom:12px;}
+  .cat-name{font-size:14px;font-weight:700;color:var(--maroon);}
+  .cat-cnt{font-size:12px;color:var(--muted);margin-top:4px;}
+
   /* PRODUCTS */
   .prod-sec{background:var(--cream);}
   .filter-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:32px;}
@@ -90,10 +133,12 @@
   .stars{color:var(--gold);font-size:13px;}.rev-cnt{font-size:11px;color:var(--muted);}
   .stk{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:10px;margin-top:6px;}
   .stk-in{background:#D1FAE5;color:#065F46;}.stk-out{background:#FEE2E2;color:#991B1B;}
+
   /* BANNER */
   .banner{background:linear-gradient(120deg,var(--maroon),#8B2235);padding:60px 24px;text-align:center;color:var(--white);}
   .banner h2{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,48px);margin-bottom:12px;}
   .banner p{opacity:.8;margin-bottom:28px;font-size:15px;}
+
   /* ORDER FORM */
   .order-sec{background:var(--white);}
   .order-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
@@ -108,6 +153,7 @@
   .info-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
   .info-list li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--muted);}
   .info-list li strong{color:var(--text);}
+
   /* TESTIMONIALS */
   .testi-sec{background:var(--white);}
   .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;}
@@ -115,7 +161,9 @@
   .testi-text{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--text);line-height:1.6;margin-bottom:20px;}
   .testi-author{display:flex;align-items:center;gap:12px;}
   .testi-av{width:44px;height:44px;border-radius:50%;background:var(--maroon);display:flex;align-items:center;justify-content:center;color:var(--white);font-size:18px;font-family:'Cormorant Garamond',serif;font-weight:700;}
-  .testi-name{font-weight:700;font-size:14px;color:var(--dark);}.testi-loc{font-size:12px;color:var(--muted);}
+  .testi-name{font-weight:700;font-size:14px;color:var(--dark);}
+  .testi-loc{font-size:12px;color:var(--muted);}
+
   /* CONTACT */
   .contact-sec{background:var(--cream);}
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;}
@@ -123,23 +171,27 @@
   .ci{display:flex;gap:16px;align-items:flex-start;}
   .ci-icon{width:44px;height:44px;background:rgba(107,26,42,.08);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
   .ci h4{font-size:14px;font-weight:700;color:var(--maroon);margin-bottom:4px;}
-  .ci p,.ci a{font-size:14px;color:var(--muted);text-decoration:none;}.ci a:hover{color:var(--maroon);}
+  .ci p,.ci a{font-size:14px;color:var(--muted);text-decoration:none;}
+  .ci a:hover{color:var(--maroon);}
   .map-box{background:linear-gradient(135deg,#F5E8E0,#E8D0C0);border-radius:16px;height:300px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--muted);}
+
   /* FOOTER */
   footer{background:var(--dark);color:rgba(255,255,255,.7);}
   .ft-top{padding:60px 0;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;}
   .ft-brand p{margin-top:14px;line-height:1.7;font-size:14px;max-width:280px;}
   .ft-col h4{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--white);margin-bottom:20px;}
   .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
-  .ft-col ul li a{color:rgba(255,255,255,.6);text-decoration:none;font-size:14px;transition:.2s;}.ft-col ul li a:hover{color:var(--gold-light);}
+  .ft-col ul li a{color:rgba(255,255,255,.6);text-decoration:none;font-size:14px;transition:.2s;}
+  .ft-col ul li a:hover{color:var(--gold-light);}
   .social-links{display:flex;gap:12px;margin-top:20px;}
-  .sl{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);text-decoration:none;font-size:16px;transition:.2s;}.sl:hover{background:var(--gold);color:var(--white);}
+  .sl{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);text-decoration:none;font-size:16px;transition:.2s;}
+  .sl:hover{background:var(--gold);color:var(--white);}
   .ft-bottom{border-top:1px solid rgba(255,255,255,.08);padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;}
-  /* MODAL */
+
+  /* MODAL (product quick view) */
   .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
   .modal-ov.open{display:flex;}
   .modal{background:var(--white);border-radius:20px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;animation:su .3s ease;}
-  @keyframes su{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
   .modal-hd{padding:26px 32px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
   .modal-hd h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--maroon);}
   .modal-x{background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted);}
@@ -149,6 +201,7 @@
   .mprod-img img{width:100%;height:100%;object-fit:cover;}
   .mprod-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--dark);}
   .mprod-price{font-size:18px;font-weight:700;color:var(--maroon);margin-top:6px;}
+
   /* CART */
   .cart-sb{position:fixed;right:-420px;top:0;width:420px;height:100vh;background:var(--white);box-shadow:-4px 0 40px rgba(0,0,0,.15);z-index:9998;transition:.35s ease;display:flex;flex-direction:column;}
   .cart-sb.open{right:0;}
@@ -164,14 +217,18 @@
   .cart-ft{padding:20px 24px;border-top:1px solid var(--border);}
   .cart-total{display:flex;justify-content:space-between;font-weight:700;font-size:16px;margin-bottom:16px;}
   .cart-empty{text-align:center;padding:40px;color:var(--muted);}
-  .ov-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9997;display:none;}.ov-bg.open{display:block;}
+  .ov-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9997;display:none;}
+  .ov-bg.open{display:block;}
+
   /* TOAST */
   .toast{position:fixed;bottom:28px;right:28px;background:var(--dark);color:var(--white);padding:14px 24px;border-radius:10px;font-size:14px;z-index:99999;transform:translateY(100px);opacity:0;transition:.3s;}
   .toast.show{transform:translateY(0);opacity:1;}
+
   /* SUCCESS */
   .success-msg{background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:20px;text-align:center;display:none;}
   .success-msg.show{display:block;}
   .success-msg h4{color:#16A34A;font-size:18px;margin-bottom:6px;}
+
   /* QTY */
   .qty-sel{display:flex;align-items:center;gap:10px;margin:12px 0;}
   .qty-b{width:32px;height:32px;border:2px solid var(--border);background:var(--white);border-radius:6px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--maroon);transition:.2s;}
@@ -181,14 +238,27 @@
   .wa-float:hover{transform:scale(1.1);}
   .loading-row{text-align:center;padding:60px;grid-column:1/-1;color:var(--muted);font-size:16px;}
   .error-row{text-align:center;padding:40px;grid-column:1/-1;color:#991B1B;background:#FEF2F2;border-radius:12px;}
-  @media(max-width:900px){.hero-content,.order-grid,.contact-grid{grid-template-columns:1fr;}.ft-top{grid-template-columns:1fr 1fr;}.hero-grid,.f2{display:none;grid-template-columns:1fr;}.f2{display:grid;}.cart-sb{width:100%;}}
-  @media(max-width:600px){.nav-links{display:none;}.ft-top{grid-template-columns:1fr;}}
+
+  @media(max-width:900px){
+    .hero-content,.order-grid,.contact-grid{grid-template-columns:1fr;}
+    .ft-top{grid-template-columns:1fr 1fr;}
+    .hero-grid{display:none;}
+    .f2{grid-template-columns:1fr;}
+    .cart-sb{width:100%;}
+  }
+  @media(max-width:600px){
+    .nav-links{display:none;}
+    .ft-top{grid-template-columns:1fr;}
+    #authSection{gap:6px;}
+    .auth-login-btn,.auth-signup-btn{padding:6px 12px;font-size:12px;}
+  }
 </style>
 </head>
 <body>
 
 <div class="topbar">✦ Free Shipping on Orders Above ₹1499 &nbsp;|&nbsp; Cash on Delivery Available &nbsp;|&nbsp; Handpicked from India's Finest Weavers ✦</div>
 
+<!-- ── FIX 3: Nav HTML Structure Theek Ki ─────────────────────── -->
 <nav>
   <div class="nav-inner">
     <a href="/" class="logo">Pankhudi<span>Saree</span></a>
@@ -199,12 +269,58 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="cart-btn" onclick="toggleCart()">🛍️<span class="cart-count" id="cartCount">0</span></button>
+      <button class="cart-btn" onclick="toggleCart()">🛍️
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
       <a href="#order" class="btn btn-primary">Order Now</a>
+      <!-- Auth Section -->
+      <div id="authSection">
+        <button class="auth-login-btn" onclick="openLogin()">Login</button>
+        <button class="auth-signup-btn" onclick="openSignup()">Signup</button>
+      </div>
+      <div id="userSection">
+        <span>👤 <span id="username"></span></span>
+        <button onclick="logout()">Logout</button>
+      </div>
     </div>
   </div>
 </nav>
 
+<!-- ── FIX 2: Login Modal (properly styled) ────────────────────── -->
+<div id="loginModal" class="auth-modal-overlay">
+  <div class="auth-modal-box">
+    <h2>Welcome Back 🥻</h2>
+    <p>Login to your Pankhudi Saree account</p>
+    <div class="auth-error" id="loginError"></div>
+    <input id="loginPhone" class="auth-input" placeholder="📱 Phone Number" type="tel">
+    <input id="loginPassword" class="auth-input" placeholder="🔒 Password" type="password">
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="login()">Login →</button>
+    <div class="auth-modal-footer">
+      <span>New here? <a href="#" onclick="openSignup()">Create account</a></span>
+      <button onclick="closeAuthModal()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;">✕ Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── FIX 2: Signup Modal (properly styled) ───────────────────── -->
+<div id="signupModal" class="auth-modal-overlay">
+  <div class="auth-modal-box">
+    <h2>Create Account 🌸</h2>
+    <p>Join Pankhudi Saree family today</p>
+    <div class="auth-error" id="signupError"></div>
+    <div class="auth-success" id="signupSuccess"></div>
+    <input id="signupName" class="auth-input" placeholder="👤 Full Name">
+    <input id="signupPhone" class="auth-input" placeholder="📱 Phone Number" type="tel">
+    <input id="signupPassword" class="auth-input" placeholder="🔒 Password (min 6 chars)" type="password">
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="signup()">Create Account →</button>
+    <div class="auth-modal-footer">
+      <span>Already have account? <a href="#" onclick="openLogin()">Login</a></span>
+      <button onclick="closeAuthModal()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;">✕ Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
@@ -300,10 +416,9 @@
         </ul>
         <div style="background:var(--cream);border-radius:12px;padding:20px;margin-top:24px;">
           <strong style="color:var(--maroon);">📞 Order on WhatsApp:</strong><br>
-          <a href="tel:+919876543210" style="font-size:20px;font-weight:700;color:var(--gold);text-decoration:none;">+91 85179 51012</a><br>
+          <a href="tel:+918517951012" style="font-size:20px;font-weight:700;color:var(--gold);text-decoration:none;">+91 85179 51012</a><br>
           <small style="color:var(--muted);">Mon–Sat, 9am – 8pm</small>
         </div>
-        <!-- ORDER TRACKING -->
         <div style="background:var(--cream);border-radius:12px;padding:20px;margin-top:16px;">
           <strong style="color:var(--maroon);">📦 Track Your Order:</strong>
           <div style="display:flex;gap:8px;margin-top:10px;">
@@ -334,9 +449,9 @@
     <div class="contact-grid">
       <div>
         <div class="ccard" style="margin-bottom:24px;">
-          <div class="ci"><div class="ci-icon">📍</div><div><h4>Our Store</h4><p>Rajeev chok, Purani central Bank, Kalapipal Mandi, Dis. Shajapup, Mp- 465337</p></div></div>
+          <div class="ci"><div class="ci-icon">📍</div><div><h4>Our Store</h4><p>Rajeev Chok, Purani Central Bank, Kalapipal Mandi, Dis. Shajapur, MP – 465337</p></div></div>
           <div class="ci"><div class="ci-icon">📞</div><div><h4>Call / WhatsApp</h4><a href="tel:+918517951012">+91 8517951012</a></div></div>
-          <div class="ci"><div class="ci-icon">📧</div><div><h4>Email</h4><a href="mailto:rangmahal@gmail.com">rangmahal@gmail.com</a></div></div>
+          <div class="ci"><div class="ci-icon">📧</div><div><h4>Email</h4><a href="mailto:pankhudisaree@gmail.com">pankhudisaree@gmail.com</a></div></div>
           <div class="ci"><div class="ci-icon">🕐</div><div><h4>Store Hours</h4><p>Mon–Sat: 9am–8pm &nbsp;|&nbsp; Sun: 10am–6pm</p></div></div>
         </div>
         <div class="ccard">
@@ -351,10 +466,14 @@
         </div>
       </div>
       <div>
-        <div class="map-box"><span style="font-size:60px;">🗺️</span><p>PankhudiSaree Store</p><p style="font-size:12px;">12, Silk Market, Varanasi</p><a href="https://maps.google.com" target="_blank" class="btn btn-primary" style="margin-top:12px;text-decoration:none;">Open in Google Maps</a></div>
+        <div class="map-box"><span style="font-size:60px;">🗺️</span><p style="font-weight:700;color:var(--maroon);">Pankhudi Saree Store</p><p style="font-size:12px;">Kalapipal Mandi, Shajapur MP</p><a href="https://maps.google.com/?q=Kalapipal+Mandi+Shajapur+MP" target="_blank" class="btn btn-primary" style="margin-top:12px;text-decoration:none;">Open in Google Maps</a></div>
         <div class="ccard" style="margin-top:20px;">
           <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--maroon);">Follow Us</h4>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;"><a href="#" class="btn btn-primary" style="font-size:13px;padding:10px 18px;">📸 Instagram</a><a href="https://www.instagram.com/pankhudi_saree_centre?igsh=MXd3dG5nMjdwY2tmNA==" class="btn btn-outline" style="font-size:13px;padding:10px 18px;">👍 Facebook</a><a href="#" class="btn btn-outline" style="font-size:13px;padding:10px 18px;">▶️ YouTube</a></div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="https://www.instagram.com/pankhudi_saree_centre?igsh=MXd3dG5nMjdwY2tmNA==" target="_blank" class="btn btn-primary" style="font-size:13px;padding:10px 18px;">📸 Instagram</a>
+            <a href="#" class="btn btn-outline" style="font-size:13px;padding:10px 18px;">👍 Facebook</a>
+            <a href="#" class="btn btn-outline" style="font-size:13px;padding:10px 18px;">▶️ YouTube</a>
+          </div>
         </div>
       </div>
     </div>
@@ -364,7 +483,7 @@
 <footer>
   <div class="container">
     <div class="ft-top">
-      <div class="ft-brand"><a href="/" class="logo">Pankhudi<span style="color:var(--gold);">Saree</span></a><p>India's trusted online saree store. Handcrafted sarees from the finest weavers, delivered to your doorstep.</p><div class="social-links"><a href="#" class="sl">📸</a><a href="#" class="sl">👍</a><a href="#" class="sl">▶️</a><a href="#" class="sl">🐦</a></div></div>
+      <div class="ft-brand"><a href="/" class="logo">Pankhudi<span style="color:var(--gold);">Saree</span></a><p>India's trusted online saree store. Handcrafted sarees from the finest weavers, delivered to your doorstep.</p><div class="social-links"><a href="https://www.instagram.com/pankhudi_saree_centre" target="_blank" class="sl">📸</a><a href="#" class="sl">👍</a><a href="#" class="sl">▶️</a><a href="#" class="sl">🐦</a></div></div>
       <div class="ft-col"><h4>Collections</h4><ul><li><a href="#">Banarasi Silk</a></li><li><a href="#">Kanjivaram</a></li><li><a href="#">Chanderi</a></li><li><a href="#">Chiffon</a></li><li><a href="#">Bridal</a></li></ul></div>
       <div class="ft-col"><h4>Help</h4><ul><li><a href="#">How to Order</a></li><li><a href="#">Shipping Policy</a></li><li><a href="#">Return Policy</a></li><li><a href="#">Track Order</a></li><li><a href="#">FAQs</a></li></ul></div>
       <div class="ft-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Blog</a></li><li><a href="#contact">Contact</a></li><li><a href="/admin">Admin</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
@@ -373,7 +492,7 @@
   </div>
 </footer>
 
-<a href="https://wa.me/919876543210" class="wa-float" target="_blank">💬</a>
+<a href="https://wa.me/918517951012" class="wa-float" target="_blank" title="WhatsApp us">💬</a>
 <div class="ov-bg" id="ovBg" onclick="toggleCart()"></div>
 
 <!-- CART SIDEBAR -->
@@ -409,12 +528,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── API BASE URL ─────────────────────────────────────────────────
-// When running locally: http://localhost:3000
-// When deployed: your server domain e.g. https://api.rangmahal.com
-const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? '' // same origin when served by Express
-  : ''; // change to 'https://your-api-domain.com' if frontend and API are on different servers
+// ================================================================
+// ── FIX 1: SINGLE API DECLARATION — ek jagah, clearly split ────
+// ================================================================
+// Sarees/Orders/Messages API (aapka Node.js backend)
+const STORE_API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? ''  // local pe same origin
+  : ''; // production pe apna domain: 'https://pankhudisaree.onrender.com'
+
+// ── FIX 5: Auth API — alag endpoint ────────────────────────────
+const AUTH_API = 'https://pankhudisaree.onrender.com/api/user';
 
 // ─── STATE ───────────────────────────────────────────────────────
 let allSarees = [], activeCat = 'all', cart = [], curProd = null;
@@ -422,11 +545,13 @@ let allSarees = [], activeCat = 'all', cart = [], curProd = null;
 // ─── INIT ─────────────────────────────────────────────────────────
 async function init() {
   await Promise.all([loadCategories(), loadSarees()]);
+  checkLoginState();
 }
 
+// ─── CATEGORIES ───────────────────────────────────────────────────
 async function loadCategories() {
   try {
-    const res = await fetch(`${API}/api/sarees/meta/categories`);
+    const res = await fetch(`${STORE_API}/api/sarees/meta/categories`);
     const data = await res.json();
     if (!data.success) return;
     document.getElementById('cntAll').textContent = data.total + ' sarees';
@@ -438,6 +563,7 @@ async function loadCategories() {
   } catch(e) { console.error('Categories load error:', e); }
 }
 
+// ─── SAREES ───────────────────────────────────────────────────────
 async function loadSarees(type, sort) {
   const grid = document.getElementById('prodGrid');
   grid.innerHTML = '<div class="loading-row">⏳ Loading sarees…</div>';
@@ -445,7 +571,7 @@ async function loadSarees(type, sort) {
     const params = new URLSearchParams();
     if (type && type !== 'all') params.set('type', type);
     if (sort) params.set('sort', sort);
-    const res = await fetch(`${API}/api/sarees?${params}`);
+    const res = await fetch(`${STORE_API}/api/sarees?${params}`);
     const data = await res.json();
     if (!data.success) throw new Error(data.message);
     allSarees = data.sarees;
@@ -453,19 +579,19 @@ async function loadSarees(type, sort) {
     fillOrderDropdown();
     renderSarees(allSarees);
   } catch(e) {
-    grid.innerHTML = `<div class="error-row">❌ Could not load sarees. ${e.message}<br><button onclick="init()" class="btn btn-outline" style="margin-top:12px;">Retry</button></div>`;
+    grid.innerHTML = `<div class="error-row">❌ Sarees load nahi hue. Server se connect karo.<br><small>${e.message}</small><br><button onclick="init()" class="btn btn-outline" style="margin-top:12px;">Retry</button></div>`;
   }
 }
 
 function renderSarees(list) {
   const grid = document.getElementById('prodGrid');
   if (!list.length) {
-    grid.innerHTML = '<p style="color:var(--muted);text-align:center;grid-column:1/-1;padding:40px;">No sarees found. Try a different search!</p>';
+    grid.innerHTML = '<p style="color:var(--muted);text-align:center;grid-column:1/-1;padding:40px;">Koi saree nahi mili. Search change karein!</p>';
     return;
   }
   grid.innerHTML = list.map(p => {
     const imgHtml = p.image_url
-      ? `<img src="${API}${p.image_url}" alt="${p.name}" loading="lazy">`
+      ? `<img src="${STORE_API}${p.image_url}" alt="${p.name}" loading="lazy">`
       : `<span style="font-size:80px;">${p.emoji || '🥻'}</span>`;
     const stars = '⭐'.repeat(Math.min(5, Math.round(p.rating) || 5));
     const badgeHtml = p.badge ? `<div class="prod-badge badge-${p.badge}">${p.badge}</div>` : '';
@@ -526,14 +652,14 @@ function filterCat(cat, el) {
   loadSarees(cat, document.getElementById('sortSel').value || 'newest');
 }
 
-// ─── MODAL ────────────────────────────────────────────────────────
+// ─── PRODUCT MODAL ────────────────────────────────────────────────
 function openMod(id) {
   const p = allSarees.find(x => x.id === id); if (!p) return;
   curProd = p;
   document.getElementById('mTitle').textContent = p.name;
   document.getElementById('mName').textContent = p.name;
   const imgEl = document.getElementById('mImg');
-  imgEl.innerHTML = p.image_url ? `<img src="${API}${p.image_url}" alt="${p.name}">` : (p.emoji || '🥻');
+  imgEl.innerHTML = p.image_url ? `<img src="${STORE_API}${p.image_url}" alt="${p.name}">` : (p.emoji || '🥻');
   document.getElementById('mPrice').textContent = '₹' + Number(p.price).toLocaleString();
   document.getElementById('mOld').textContent = p.old_price ? '₹' + Number(p.old_price).toLocaleString() : '';
   document.getElementById('mDesc').textContent = p.description || '';
@@ -553,27 +679,33 @@ function qCart(id) { const p=allSarees.find(x=>x.id===id); if(p) addCart(p,1); }
 function addCart(p, qty) {
   const ex = cart.find(x=>x.id===p.id);
   if (ex) ex.qty += qty; else cart.push({...p, qty});
-  renderCart(); showToast(`"${p.name}" added to cart!`);
+  renderCart(); showToast(`"${p.name}" cart mein add hua! 🛍️`);
 }
 function rmCart(id) { cart = cart.filter(x=>x.id!==id); renderCart(); }
 function renderCart() {
   document.getElementById('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
   const el = document.getElementById('cartItems'), ft = document.getElementById('cartFt');
-  if (!cart.length) { el.innerHTML='<div class="cart-empty"><span style="font-size:50px;display:block;margin-bottom:12px;">🛒</span><p>Your cart is empty</p></div>'; ft.style.display='none'; return; }
+  if (!cart.length) {
+    el.innerHTML='<div class="cart-empty"><span style="font-size:50px;display:block;margin-bottom:12px;">🛒</span><p>Cart abhi khali hai</p></div>';
+    ft.style.display='none'; return;
+  }
   el.innerHTML = cart.map(i => {
-    const imgHtml = i.image_url ? `<img src="${API}${i.image_url}" alt="${i.name}">` : (i.emoji || '🥻');
+    const imgHtml = i.image_url ? `<img src="${STORE_API}${i.image_url}" alt="${i.name}">` : (i.emoji || '🥻');
     return `<div class="cart-item"><div class="ci-img">${imgHtml}</div><div style="flex:1;"><div class="ci-name">${i.name}</div><div class="ci-price">₹${Number(i.price).toLocaleString()} × ${i.qty}</div></div><button class="ci-rm" onclick="rmCart(${i.id})">🗑️</button></div>`;
   }).join('');
   document.getElementById('cartTotal').textContent = '₹' + cart.reduce((s,i)=>s+Number(i.price)*i.qty,0).toLocaleString();
   ft.style.display = 'block';
 }
-function toggleCart() { document.getElementById('cartSb').classList.toggle('open'); document.getElementById('ovBg').classList.toggle('open'); }
+function toggleCart() {
+  document.getElementById('cartSb').classList.toggle('open');
+  document.getElementById('ovBg').classList.toggle('open');
+}
 
-// ─── ORDER SUBMIT ─────────────────────────────────────────────────
+// ── FIX 4: ORDER SUBMIT — STORE_API use karo ───────────────────
 async function submitOrder(e) {
   e.preventDefault();
   const btn = document.getElementById('orderBtn');
-  btn.disabled = true; btn.textContent = '⏳ Placing Order…';
+  btn.disabled = true; btn.textContent = '⏳ Order place ho raha hai…';
   const selectedSaree = allSarees.find(p => p.name === document.getElementById('oSaree').value);
   const payload = {
     customer_name: document.getElementById('oName').value,
@@ -590,7 +722,7 @@ async function submitOrder(e) {
     cart_items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty }))
   };
   try {
-    const res = await fetch(`${API}/api/orders`, {
+    const res = await fetch(`${STORE_API}/api/orders`, {   // ← STORE_API use
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -601,7 +733,7 @@ async function submitOrder(e) {
     document.getElementById('orderOk').classList.add('show');
     document.getElementById('orderIdTxt').textContent = `Order ID: ${data.order.order_number}`;
     cart = []; renderCart();
-    showToast('🎉 Order placed! We\'ll contact you soon.');
+    showToast('🎉 Order place ho gaya!');
     setTimeout(() => {
       document.getElementById('orderOk').classList.remove('show');
       document.getElementById('orderForm').style.display = 'block';
@@ -609,34 +741,41 @@ async function submitOrder(e) {
       btn.disabled = false; btn.textContent = '🛍️ Confirm Order';
     }, 10000);
   } catch(err) {
-    showToast('❌ Error. Please call: +91 98765 43210');
+    showToast('❌ Error. Call karein: +91 8517951012');
     btn.disabled = false; btn.textContent = '🛍️ Confirm Order';
   }
 }
 
-// ─── CONTACT SUBMIT ───────────────────────────────────────────────
+// ── FIX 4: CONTACT SUBMIT — STORE_API use karo ─────────────────
 async function submitContact(e) {
   e.preventDefault();
   const btn = document.getElementById('contactBtn');
-  btn.disabled = true; btn.textContent = '⏳ Sending…';
+  btn.disabled = true; btn.textContent = '⏳ Bhej rahe hain…';
   try {
-    const res = await fetch(`${API}/api/messages`, {
+    const res = await fetch(`${STORE_API}/api/messages`, {   // ← STORE_API use
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: document.getElementById('cName').value, contact: document.getElementById('cContact').value, message: document.getElementById('cMsg').value })
+      body: JSON.stringify({
+        name: document.getElementById('cName').value,
+        contact: document.getElementById('cContact').value,
+        message: document.getElementById('cMsg').value
+      })
     });
     const data = await res.json();
     if (!data.success) { showToast('❌ ' + data.message); btn.disabled=false; btn.textContent='Send Message'; return; }
     document.getElementById('contactOk').classList.add('show');
     document.getElementById('contactForm').style.display = 'none';
-    showToast('✅ Message sent!');
+    showToast('✅ Message bhej diya!');
     setTimeout(() => {
       document.getElementById('contactOk').classList.remove('show');
       document.getElementById('contactForm').style.display = 'block';
       document.getElementById('contactForm').reset();
       btn.disabled = false; btn.textContent = 'Send Message';
     }, 5000);
-  } catch(err) { showToast('❌ Error. Please email us.'); btn.disabled=false; btn.textContent='Send Message'; }
+  } catch(err) {
+    showToast('❌ Error. Please call ya WhatsApp karein.');
+    btn.disabled = false; btn.textContent = 'Send Message';
+  }
 }
 
 // ─── ORDER TRACKING ───────────────────────────────────────────────
@@ -644,9 +783,9 @@ async function trackOrder() {
   const num = document.getElementById('trackInput').value.trim().toUpperCase();
   if (!num) return;
   const el = document.getElementById('trackResult');
-  el.innerHTML = '⏳ Looking up order…';
+  el.innerHTML = '⏳ Order dhundh rahe hain…';
   try {
-    const res = await fetch(`${API}/api/orders/track/${num}`);
+    const res = await fetch(`${STORE_API}/api/orders/track/${num}`);
     const data = await res.json();
     if (!data.success) { el.innerHTML = `<span style="color:#991B1B;">❌ ${data.message}</span>`; return; }
     const o = data.order;
@@ -654,9 +793,99 @@ async function trackOrder() {
     el.innerHTML = `<div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px;">
       <strong>${o.order_number}</strong> — ${o.saree_name} × ${o.quantity}<br>
       Status: <strong style="color:${statusColor[o.status]||'#374151'}">${o.status.toUpperCase()}</strong>
-      ${o.tracking_number ? `<br>Tracking: <strong>${o.tracking_number}</strong>` : ''}
+      ${o.tracking_number ? `<br>Tracking No: <strong>${o.tracking_number}</strong>` : ''}
     </div>`;
-  } catch(e) { el.innerHTML = '<span style="color:#991B1B;">❌ Error checking order.</span>'; }
+  } catch(e) { el.innerHTML = '<span style="color:#991B1B;">❌ Order check karne mein error aaya.</span>'; }
+}
+
+// ── FIX 2+5: AUTH FUNCTIONS — properly working ─────────────────
+function openLogin() {
+  closeAuthModal();
+  document.getElementById('loginModal').classList.add('open');
+  document.getElementById('loginError').style.display = 'none';
+}
+function openSignup() {
+  closeAuthModal();
+  document.getElementById('signupModal').classList.add('open');
+  document.getElementById('signupError').style.display = 'none';
+  document.getElementById('signupSuccess').style.display = 'none';
+}
+function closeAuthModal() {
+  document.getElementById('loginModal').classList.remove('open');
+  document.getElementById('signupModal').classList.remove('open');
+}
+// Close on overlay click
+document.getElementById('loginModal').addEventListener('click', e => { if(e.target===document.getElementById('loginModal')) closeAuthModal(); });
+document.getElementById('signupModal').addEventListener('click', e => { if(e.target===document.getElementById('signupModal')) closeAuthModal(); });
+
+async function signup() {
+  const name = document.getElementById('signupName').value.trim();
+  const phone = document.getElementById('signupPhone').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const errEl = document.getElementById('signupError');
+  const okEl = document.getElementById('signupSuccess');
+
+  if (!name || !phone || !password) { errEl.textContent='Sabhi field bharna zaroori hai!'; errEl.style.display='block'; return; }
+  if (password.length < 6) { errEl.textContent='Password kam se kam 6 characters ka hona chahiye.'; errEl.style.display='block'; return; }
+
+  errEl.style.display='none';
+  try {
+    const res = await fetch(`${AUTH_API}/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.message || 'Signup fail hua.'; errEl.style.display='block'; return; }
+    okEl.textContent = '✅ Account ban gaya! Ab login karein.';
+    okEl.style.display = 'block';
+    setTimeout(openLogin, 1500);
+  } catch(e) { errEl.textContent='Server se connect nahi ho pa raha. Check karo ki backend chal raha hai.'; errEl.style.display='block'; }
+}
+
+async function login() {
+  const phone = document.getElementById('loginPhone').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+
+  if (!phone || !password) { errEl.textContent='Phone aur password dono bharo!'; errEl.style.display='block'; return; }
+  errEl.style.display='none';
+
+  try {
+    const res = await fetch(`${AUTH_API}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, password })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.token) { errEl.textContent = data.message || 'Login fail hua. Phone ya password check karein.'; errEl.style.display='block'; return; }
+    localStorage.setItem('ps_token', data.token);
+    localStorage.setItem('ps_user', JSON.stringify(data.user));
+    closeAuthModal();
+    checkLoginState();
+    showToast('✅ Login ho gaye! Welcome ' + (data.user?.name || '') + ' 🎉');
+  } catch(e) { errEl.textContent='Server se connect nahi ho pa raha. Backend check karo.'; errEl.style.display='block'; }
+}
+
+function logout() {
+  localStorage.removeItem('ps_token');
+  localStorage.removeItem('ps_user');
+  checkLoginState();
+  showToast('👋 Logout ho gaye!');
+}
+
+function checkLoginState() {
+  const user = JSON.parse(localStorage.getItem('ps_user') || 'null');
+  const authSec = document.getElementById('authSection');
+  const userSec = document.getElementById('userSection');
+  if (user && localStorage.getItem('ps_token')) {
+    authSec.style.display = 'none';
+    userSec.style.display = 'flex';
+    document.getElementById('username').textContent = user.name || user.phone;
+  } else {
+    authSec.style.display = 'flex';
+    userSec.style.display = 'none';
+  }
 }
 
 // ─── HELPERS ─────────────────────────────────────────────────────
