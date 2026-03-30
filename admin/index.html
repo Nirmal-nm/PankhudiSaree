@@ -675,12 +675,18 @@ async function changePassword() {
   const email = prompt("Enter your email:");
   const newPassword = prompt("Enter new password:");
 
-  const res = await fetch("http://localhost:3000/api/change-password", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email, newPassword })
+  // const res = await fetch("http://localhost:3000/api/change-password", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   },
+  //   body: JSON.stringify({ email, newPassword })
+  // });
+  // ✅ Use the same API variable used everywhere else
+  const res = await fetch(`${API}/api/auth/change-password`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({ currentPassword: currentPass, newPassword })
   });
 
   const data = await res.json();
