@@ -236,4 +236,30 @@ router.delete('/:id', requireAuth, async (req, res) => {
   }
 });
 
+router.patch('/:id/status', requireAuth, async (req, res) => {
+  const { status, note, tracking_number } = req.body;
+  const validStatuses = ['new','confirmed','processing','shipped','delivered','cancelled'];
+
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ success: false, message: 'Invalid status.' });
+  }
+
+  try {
+    const [rows] = await db.query('SELECT status FROM orders WHERE id = ?', [req.params.id]);
+    if (!rows.length) return res.status(404).json({ success: false, message: 'Order not found.' });
+
+    const updates = ['status = ?'];
+    const vals = [status];
+    if (tracking_number) { updates.push('tracking_number = ?'); vals.push(tracking_number); }
+    vals.push(req.params.id);
+
+    await db.query(`UPDATE orders SET ${updates.join(', ')} WHERE id = ?`, vals);
+
+    res.json({ success: true, message: `Order status updated to: ${status}` });
+
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
 module.exports = router;
