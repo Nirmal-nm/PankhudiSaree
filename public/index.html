@@ -252,6 +252,33 @@
     #authSection{gap:6px;}
     .auth-login-btn,.auth-signup-btn{padding:6px 12px;font-size:12px;}
   }
+
+  .order-card {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.order-id {
+  font-weight: bold;
+  color: #7a1f2c;
+}
+
+.order-status {
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: white;
+}
+
+.status-new { background: orange; }
+.status-processing { background: blue; }
+.status-shipped { background: purple; }
+.status-delivered { background: green; }
+.status-cancelled { background: red; }
 </style>
 </head>
 <body>
@@ -278,6 +305,7 @@
         <button class="auth-login-btn" onclick="openLogin()">Login</button>
         <button class="auth-signup-btn" onclick="openSignup()">Signup</button>
       </div>
+     <button onclick="loadMyOrders()" class="btn btn-primary">My Orders</button>
       <div id="userSection">
         <span>👤 <span id="username"></span></span>
         <button onclick="logout()">Logout</button>
@@ -285,7 +313,7 @@
     </div>
   </div>
 </nav>
-
+<div id="ordersSection" style="padding:20px;"></div>
 <!-- ── FIX 2: Login Modal (properly styled) ────────────────────── -->
 <div id="loginModal" class="auth-modal-overlay">
   <div class="auth-modal-box">
@@ -300,6 +328,11 @@
       <button onclick="closeAuthModal()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;">✕ Close</button>
     </div>
   </div>
+</div>
+
+<div id="ordersPage" style="display:none; padding:30px;">
+  <h2 style="margin-bottom:20px;">🧾 My Orders</h2>
+  <div id="ordersList"></div>
 </div>
 
 <!-- ── FIX 2: Signup Modal (properly styled) ───────────────────── -->
@@ -532,10 +565,9 @@
 // ── FIX 1: SINGLE API DECLARATION — ek jagah, clearly split ────
 // ================================================================
 // Sarees/Orders/Messages API (aapka Node.js backend)
-const STORE_API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? ''  // local pe same origin
-  : ''; // production pe apna domain: 'https://pankhudisaree.onrender.com'
-
+const STORE_API = window.location.hostname === 'localhost'
+  ? ''
+  : 'https://pankhudisaree.onrender.com';
 // ── FIX 5: Auth API — alag endpoint ────────────────────────────
 const AUTH_API = 'https://pankhudisaree.onrender.com/api/user';
 
@@ -702,10 +734,30 @@ function toggleCart() {
 }
 
 // ── FIX 4: ORDER SUBMIT — STORE_API use karo ───────────────────
+const token = localStorage.getItem("token");
+
+if (!token) {
+  showToast("⚠️ Pehle login karo");
+  openLogin();
+  btn.disabled = false;
+  btn.textContent = '🛍️ Confirm Order';
+  return;
+}
 async function submitOrder(e) {
   e.preventDefault();
+
   const btn = document.getElementById('orderBtn');
-  btn.disabled = true; btn.textContent = '⏳ Order place ho raha hai…';
+
+  const token = localStorage.getItem("ps_token"); // ✅ FIX
+
+  if (!token) {
+    showToast("⚠️ Pehle login karo");
+    openLogin();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Order place ho raha hai…';
   const selectedSaree = allSarees.find(p => p.name === document.getElementById('oSaree').value);
   const payload = {
     customer_name: document.getElementById('oName').value,
@@ -724,7 +776,10 @@ async function submitOrder(e) {
   try {
     const res = await fetch(`${STORE_API}/api/orders`, {   // ← STORE_API use
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      // headers: { 'Content-Type': 'application/json' }
+      headers: {"Content-Type": "application/json",
+              "Authorization": "Bearer " + localStorage.getItem("ps_token")
+},
       body: JSON.stringify(payload)
     });
     const data = await res.json();
