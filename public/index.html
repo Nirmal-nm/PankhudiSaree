@@ -279,6 +279,16 @@
 .status-shipped { background: purple; }
 .status-delivered { background: green; }
 .status-cancelled { background: red; }
+
+.hero-card { position: relative; overflow: hidden; }
+.hero-card img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute; top: 0; left: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.hero-card img.active { opacity: 1; }
 </style>
 </head>
 <body>
@@ -374,10 +384,26 @@
         <div><div class="stat-num">15+</div><div class="stat-lbl">Years of Trust</div></div>
       </div>
     </div>
+        <!-- Hero grid — purana wala replace karo -->
     <div class="hero-grid">
-      <div class="hero-card tall">🥻</div>
-      <div class="hero-card">🪡</div>
-      <div class="hero-card">💎</div>
+      <div class="hero-card tall" id="hc0">
+        <img src="public\uploads\saree1.jpg" alt="saree 1">
+        <img src="public\uploads\saree2.jpg" alt="saree 2">
+        <img src="public\uploads\saree3.jpg" alt="saree 3">
+        <img src="public\uploads\saree3.jpg" alt="saree 4">
+      </div>
+      <div class="hero-card" id="hc1">
+        <img src="public\uploads\saree5.jpg" alt="saree 5">
+        <img src="public\uploads\saree6.jpg" alt="saree 6">
+        <img src="public\uploads\saree7.jpg" alt="saree 7">
+        <img src="public\uploads\saree8.jpg" alt="saree 8">
+      </div>
+      <div class="hero-card" id="hc2">
+        <img src="public\uploads\saree9.jpg"  alt="saree 9">
+        <img src="public\uploads\saree10.jpg" alt="saree 10">
+        <img src="public\uploads\saree11.jpg" alt="saree 11">
+        <img src="public\uploads\saree12.jpg" alt="saree 12">
+      </div>
     </div>
   </div>
 </section>
@@ -564,6 +590,27 @@
 <div class="toast" id="toast"></div>
 
 <script>
+
+(function(){s
+  const cards = ['hc0','hc1','hc2'].map(id => document.getElementById(id));
+  let idx = 0;
+
+  function show(i) {
+    cards.forEach(card => {
+      const imgs = card.querySelectorAll('img');
+      imgs.forEach((img, j) => img.classList.toggle('active', j === i));
+    });
+    idx = i;
+  }
+
+  show(0); // pehli photo turant dikhaao
+
+  setInterval(() => {
+    const total = cards[0].querySelectorAll('img').length;
+    show((idx + 1) % total);
+  }, 3000); // 3 second mein badlega — change karo agar chahiye
+})();
+
 // ================================================================
 // ── FIX 1: SINGLE API DECLARATION — ek jagah, clearly split ────
 // ================================================================
