@@ -734,15 +734,7 @@ function toggleCart() {
 }
 
 // ── FIX 4: ORDER SUBMIT — STORE_API use karo ───────────────────
-const token = localStorage.getItem("token");
 
-if (!token) {
-  showToast("⚠️ Pehle login karo");
-  openLogin();
-  btn.disabled = false;
-  btn.textContent = '🛍️ Confirm Order';
-  return;
-}
 async function submitOrder(e) {
   e.preventDefault();
 
