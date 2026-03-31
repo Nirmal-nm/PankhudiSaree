@@ -58,6 +58,7 @@ async function setup() {
   await conn.query(`
     CREATE TABLE IF NOT EXISTS orders (
       id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT DEFAULT NULL,
       order_number VARCHAR(20) UNIQUE NOT NULL,
       customer_name VARCHAR(150) NOT NULL,
       customer_phone VARCHAR(20) NOT NULL,
@@ -107,6 +108,16 @@ async function setup() {
       FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
     )
   `);
+
+  await conn.query(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    phone VARCHAR(20) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`);
 
   // ─── SEED ADMIN ────────────────────────────────────────────────
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@rangmahal.com';

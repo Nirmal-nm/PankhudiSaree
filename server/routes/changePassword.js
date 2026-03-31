@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const db = require("../db"); // your DB connection
 
-router.post("/change-password", async (req, res) => {
+const { requireAuth } = require('../middleware/auth');
+router.post("/change-password", requireAuth, async (req, res) => {
   const { email, newPassword } = req.body;
 
   try {
